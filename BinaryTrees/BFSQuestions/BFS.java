@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class BFSImp{
 
     public static class Node {
@@ -54,7 +56,7 @@ public class BFSImp{
          return ans;
     }
 
-    //Level order successor
+    //3.Level order successor
         public static int levelSuccessor(Node root, int val){
          if (root == null) return 0;
          Queue<Node> q = new LinkedList<>();
@@ -71,7 +73,7 @@ public class BFSImp{
          return q.poll().value;
     }
 
-    //Zig Zag Level order Traversal
+    //4.Zig Zag Level order Traversal
         public ArrayList<ArrayList<Integer>> zigzagLevelOrder(Node root) {
          ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
          if (root == null) return ans;
@@ -108,7 +110,7 @@ public class BFSImp{
 
         }
 
-        //Reverse Level Order Traversal
+        //5.Reverse Level Order Traversal
           public static ArrayList<ArrayList<Integer>> bfs2(Node root){
          ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
          if (root == null) return ans;
@@ -130,7 +132,7 @@ public class BFSImp{
          return ans;
     }
 
-    //Populating Next Right Pointers in Each Node
+    //6.Populating Next Right Pointers in Each Node
         public Node connect(Node root) {
           if (root == null) {
             return root;
@@ -150,7 +152,7 @@ public class BFSImp{
            return root;
         }
 
-     //Binary Tree Right Side View
+     //7.Binary Tree Right Side View
          public List<Integer> rightSideView(Node root) {
         List<Integer> ans = new ArrayList<>();
           if (root == null) return ans;
@@ -173,7 +175,96 @@ public class BFSImp{
 
     }
 
-    
+    //8.Cousins in Binary Tree
+    public boolean isCousins(Node root, int x, int y) {
+      if (root == null) {
+        return false;
+      }
+        Node xx = findNode(root, x);
+        Node yy = findNode(root, y);
+
+        if (xx == null || yy == null) {
+          return false;
+        }
+        return (findLevel(root, xx, 0) == findLevel(root, yy, 0)) && (isSibling(root, xx, yy) == false);
+    }
+
+    public Node findNode(Node node , int x){
+      if (node == null) {
+        return node;
+      }
+      if (node.value == x) {
+        return node;
+      }
+      Node leftSide = findNode(node.left, x);
+      if (leftSide != null) {
+        return leftSide;
+      }
+      return findNode(node.right, x);
+    }
+
+    public int findLevel(Node node,Node search, int level ){
+      if (node == null) {
+         return 0;
+      }
+      if (node == search) {
+        return level;
+      }
+      int leftLevel = findLevel(node.left, search, level+1);
+      if (leftLevel != 0) {
+        return leftLevel;
+      }
+      return findLevel(node.right, search, level+1);
+    }
+
+    public boolean isSibling(Node node , Node search1 , Node search2){
+      if (node == null ) {
+        return false;
+      }
+      Node f = null;
+      Node s = null;
+      if(node.left != null)  f  = node.left;
+      if(node.right != null)  s  = node.right;
+      if ((f == search1 &&  s == search2)|| (f == search2 && s == search1)) {
+        return true;
+      }
+      return isSibling(node.left, search1, search2) || isSibling(node.right, search1, search2);
+
+
+    }
+
+    //9.Symmetric Tree
+    public boolean isSymmetric(Node root) {
+        if (root == null) {
+          return false;
+        }
+        Queue<Node> q = new LinkedList<>();
+        q.add(root.left);
+        q.add(root.right);
+        while (!q.isEmpty()) {
+           Node leftSide = q.poll();
+           Node rightSide = q.poll();
+
+           if (leftSide == null && rightSide == null) {
+            continue;
+           }
+           if (leftSide == null || rightSide == null) {
+            return false;
+           }
+           if (leftSide.value != rightSide.value ) {
+            return false;
+           }
+           q.add(leftSide.left);
+           q.add(rightSide.right);
+           q.add(leftSide.right);
+           q.add(rightSide.left);
+
+        }
+
+        return true;
+
+    }
+
 
     public static void main(String[] args) {
         
